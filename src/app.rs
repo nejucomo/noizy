@@ -1,23 +1,13 @@
-use eframe::egui::{CentralPanel, Modifiers, Rect, Scene, Sense, Vec2};
+use eframe::egui::{CentralPanel, Modifiers, Sense, Vec2};
 use eframe::egui::{Context, Key::Escape, ViewportCommand::Close};
 
 use crate::gadget::GadgetBox;
 use crate::idgen::IdGen;
 
+#[derive(Default)]
 pub(crate) struct App {
     idgen: IdGen,
-    scenerect: Rect,
     gadgets: Vec<GadgetBox>,
-}
-
-impl Default for App {
-    fn default() -> Self {
-        Self {
-            idgen: IdGen::default(),
-            scenerect: Rect::ZERO,
-            gadgets: vec![],
-        }
-    }
 }
 
 impl eframe::App for App {
@@ -27,24 +17,22 @@ impl eframe::App for App {
                 ctx.send_viewport_cmd(Close);
             }
 
-            Scene::new().show(ui, &mut self.scenerect, |ui| {
-                for gbox in self.gadgets.iter_mut() {
-                    ui.add(gbox);
-                }
+            for gbox in self.gadgets.iter_mut() {
+                ui.add(gbox);
+            }
 
-                let (_, resp) = ui.allocate_exact_size(
-                    Vec2::new(ui.available_width(), ui.available_height()),
-                    Sense::click(),
-                );
+            let (_, resp) = ui.allocate_exact_size(
+                Vec2::new(ui.available_width(), ui.available_height()),
+                Sense::click(),
+            );
 
-                if resp.clicked() {
-                    let id = self.idgen.next_id();
-                    let pos = resp.interact_pointer_pos().unwrap();
-                    self.gadgets.push(GadgetBox::new(id, pos));
-                }
+            if resp.clicked() {
+                let id = self.idgen.next_id();
+                let pos = resp.interact_pointer_pos().unwrap();
+                self.gadgets.push(GadgetBox::new(id, pos));
+            }
 
-                resp
-            });
+            resp
         });
     }
 }

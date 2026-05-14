@@ -1,5 +1,5 @@
 use derive_new::new;
-use eframe::egui::{Area, Id, Pos2, Response, Ui, Widget};
+use eframe::egui::{Area, Frame, Id, Pos2, Response, Ui, Widget};
 
 use self::Gadget::*;
 
@@ -17,12 +17,16 @@ impl Widget for &mut GadgetBox {
         let area = Area::new(self.id);
 
         let area = if let Some(pos) = self.newpos.take() {
+            dbg!(pos, ui.min_rect(), ui.max_rect());
             area.default_pos(pos)
         } else {
             area
         };
 
-        area.show(ui.ctx(), |ui| ui.add(&mut self.gadget)).response
+        area.show(ui.ctx(), |ui| {
+            Frame::window(&ui.ctx().style()).show(ui, |ui| ui.add(&mut self.gadget));
+        })
+        .response
     }
 }
 
