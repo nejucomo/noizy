@@ -1,20 +1,28 @@
 use derive_new::new;
-use eframe::egui::{Area, Id, Response, Ui, Widget};
+use eframe::egui::{Area, Id, Pos2, Response, Ui, Widget};
 
 use self::Gadget::*;
 
 #[derive(new)]
 pub(crate) struct GadgetBox {
     id: Id,
+    #[new(into)]
+    newpos: Option<Pos2>,
     #[new(default)]
     gadget: Gadget,
 }
 
 impl Widget for &mut GadgetBox {
     fn ui(self, ui: &mut Ui) -> Response {
-        Area::new(self.id)
-            .show(ui.ctx(), |ui| ui.add(&mut self.gadget))
-            .response
+        let area = Area::new(self.id);
+
+        let area = if let Some(pos) = self.newpos.take() {
+            area.default_pos(pos)
+        } else {
+            area
+        };
+
+        area.show(ui.ctx(), |ui| ui.add(&mut self.gadget)).response
     }
 }
 

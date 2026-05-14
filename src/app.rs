@@ -27,22 +27,24 @@ impl eframe::App for App {
                 ctx.send_viewport_cmd(Close);
             }
 
-            let resp = Scene::new()
-                .sense(Sense::hover())
-                .show(ui, &mut self.scenerect, |ui| {
-                    let mut r = ui.allocate_response(Vec2::ZERO, Sense::hover());
-                    for gbox in self.gadgets.iter_mut() {
-                        r |= ui.add(gbox);
-                    }
-                    r
-                })
-                .inner;
+            Scene::new().show(ui, &mut self.scenerect, |ui| {
+                for gbox in self.gadgets.iter_mut() {
+                    ui.add(gbox);
+                }
 
-            if resp.clicked() {
-                let id = self.idgen.next_id();
-                let pos = resp.interact_pointer_pos().unwrap();
-                todo!("{id:?} {pos:?}");
-            }
+                let (_, resp) = ui.allocate_exact_size(
+                    Vec2::new(ui.available_width(), ui.available_height()),
+                    Sense::click(),
+                );
+
+                if resp.clicked() {
+                    let id = self.idgen.next_id();
+                    let pos = resp.interact_pointer_pos().unwrap();
+                    self.gadgets.push(GadgetBox::new(id, pos));
+                }
+
+                resp
+            });
         });
     }
 }
