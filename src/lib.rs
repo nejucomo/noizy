@@ -3,6 +3,8 @@
 use crate::app::App;
 
 mod app;
+mod gadget;
+mod idgen;
 
 pub fn run() {
     use eframe::{NativeOptions, egui::ViewportBuilder, run_native};
