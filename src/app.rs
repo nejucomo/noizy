@@ -1,7 +1,7 @@
 use eframe::egui::{CentralPanel, Modifiers, Sense, Vec2};
 use eframe::egui::{Context, Key::Escape, ViewportCommand::Close};
 
-use crate::gadget::GadgetBox;
+use crate::gadgets::GadgetBox;
 use crate::idgen::IdGen;
 
 #[derive(Default)]
