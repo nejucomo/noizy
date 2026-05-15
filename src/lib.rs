@@ -5,7 +5,6 @@ use crate::app::App;
 mod app;
 mod gadgets;
 mod idgen;
-mod tuning;
 
 pub fn run() {
     use eframe::{NativeOptions, egui::ViewportBuilder, run_native};
