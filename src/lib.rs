@@ -3,6 +3,7 @@
 use crate::app::App;
 
 mod app;
+mod consts;
 mod gadgets;
 mod idgen;
 
