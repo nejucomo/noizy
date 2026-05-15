@@ -19,7 +19,7 @@ impl Pending {
         }
 
         let optg = if resp.lost_focus() {
-            self.parse_initializer()
+            Gadget::parse_initializer_opt(&self.initializer)
         } else {
             None
         };
@@ -27,13 +27,5 @@ impl Pending {
         self.was_focused = resp.has_focus();
 
         InnerResponse::new(optg, resp)
-    }
-
-    fn parse_initializer(&self) -> Option<Gadget> {
-        if self.initializer == "sin" {
-            Some(Gadget::Sin)
-        } else {
-            None
-        }
     }
 }

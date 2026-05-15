@@ -89,7 +89,7 @@ impl Widget for &mut InnerWidget {
                 iresp.response
             }
 
-            Gadget(gadget) => ui.add(gadget),
+            Gadget(gadget) => ui.add(&*gadget),
         }
     }
 }

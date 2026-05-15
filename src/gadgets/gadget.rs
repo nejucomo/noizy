@@ -1,15 +1,27 @@
 use eframe::egui::{Response, Ui, Widget};
 
-use self::Gadget::*;
+use crate::gadgets::sin::Sin;
 
 pub(super) enum Gadget {
-    Sin,
+    Sin(Sin),
 }
 
-impl Widget for &mut Gadget {
-    fn ui(self, _ui: &mut Ui) -> Response {
+impl Gadget {
+    pub(super) fn parse_initializer_opt(init: &str) -> Option<Self> {
+        if init == "sin" {
+            Some(Gadget::Sin(Sin::default()))
+        } else {
+            None
+        }
+    }
+}
+
+impl Widget for &Gadget {
+    fn ui(self, ui: &mut Ui) -> Response {
+        use self::Gadget::*;
+
         match self {
-            Sin => todo!("`Widget::ui` for `Gadget::Sin`"),
+            Sin(s) => s.ui(ui),
         }
     }
 }
