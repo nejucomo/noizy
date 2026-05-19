@@ -1,6 +1,7 @@
 use eframe::egui::{InnerResponse, Ui};
 
-use crate::gadgets::gadget::Gadget;
+use crate::gadgets::Gadget;
+use crate::iwidget::IWidget;
 
 #[derive(Default)]
 pub(super) struct Pending {
@@ -9,8 +10,10 @@ pub(super) struct Pending {
     was_focused: bool,
 }
 
-impl Pending {
-    pub(super) fn show(&mut self, ui: &mut Ui) -> InnerResponse<Option<Gadget>> {
+impl IWidget for &mut Pending {
+    type Inner = Option<Gadget>;
+
+    fn ui_iresp(self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
         let resp = ui.text_edit_singleline(&mut self.initializer);
 
         if !self.request_initial_focus {
