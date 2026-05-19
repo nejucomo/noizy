@@ -7,6 +7,7 @@ mod consts;
 mod gadgets;
 mod idgen;
 mod iwidget;
+mod l2g;
 mod pending;
 mod widgetbox;
 

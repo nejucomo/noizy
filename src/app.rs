@@ -1,6 +1,7 @@
 use eframe::egui::{CentralPanel, Modifiers, Sense, Vec2};
 use eframe::egui::{Context, Key::Escape, ViewportCommand::Close};
 
+use crate::consts::{GADGET_L2G, PENDING_L2G};
 use crate::gadgets::Gadget;
 use crate::idgen::IdGen;
 use crate::iwidget::UiExt as _;
@@ -30,7 +31,7 @@ impl eframe::App for App {
                 let id = self.idgen.next_id();
                 let pos = resp.interact_pointer_pos().unwrap();
                 // Overwrite any other pending, if it exists:
-                self.pending = Some(WidgetBox::new(id, pos, Pending::default()));
+                self.pending = Some(WidgetBox::new(id, pos, PENDING_L2G, Pending::default()));
             }
 
             for gbox in self.gadgets.iter_mut() {
@@ -43,6 +44,7 @@ impl eframe::App for App {
                     self.gadgets.push(WidgetBox::new(
                         self.idgen.next_id(),
                         pending.get_pos(ctx),
+                        GADGET_L2G,
                         gadget,
                     ));
                 } else {

@@ -1,17 +1,24 @@
 use eframe::egui::{Area, AreaState, Context, Frame, Id, InnerResponse, Pos2, Ui};
 
 use crate::iwidget::IWidget;
+use crate::l2g::LerpToGamma;
 
 pub(crate) struct WidgetBox<T> {
     id: Id,
     initpos: Option<Pos2>,
+    l2g: LerpToGamma,
     pub(crate) inner: T,
 }
 
 impl<T> WidgetBox<T> {
-    pub(crate) fn new(id: Id, initpos: Pos2, inner: T) -> Self {
+    pub(crate) fn new(id: Id, initpos: Pos2, l2g: LerpToGamma, inner: T) -> Self {
         let initpos = Some(initpos);
-        Self { id, initpos, inner }
+        Self {
+            id,
+            initpos,
+            l2g,
+            inner,
+        }
     }
 
     pub(crate) fn get_pos(&self, ctx: &Context) -> Pos2 {
@@ -34,9 +41,10 @@ where
         }
 
         area.show(ui.ctx(), |ui| {
-            Frame::window(&ui.ctx().style())
-                .show(ui, |ui| (&mut self.inner).ui_iresp(ui).inner)
-                .inner
+            let mut f = Frame::window(&ui.ctx().style());
+            self.l2g.mix_into(&mut f.fill);
+
+            f.show(ui, |ui| (&mut self.inner).ui_iresp(ui).inner).inner
         })
     }
 }
