@@ -26,11 +26,14 @@ where
             .current_pos(self.pos)
             .show(ui.ctx(), |ui| {
                 let mut f = Frame::window(&ui.ctx().style());
+                f.inner_margin.left /= 2;
 
                 self.l2g.mix_into(&mut f.fill);
 
                 f.show(ui, |ui| {
                     ui.horizontal_centered(|ui| {
+                        ui.spacing_mut().item_spacing.x /= 2.0;
+
                         let width = ui.text_style_height(&TextStyle::Body) / GOLDEN_RATIO;
 
                         // Reserve horizontal space, but don't prescribe row height.
