@@ -4,6 +4,7 @@ use crate::app::App;
 
 mod app;
 mod consts;
+mod draghandle;
 mod idgen;
 mod l2g;
 mod pending;

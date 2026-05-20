@@ -1,29 +1,17 @@
-use eframe::egui::{Area, AreaState, Context, Frame, Id, InnerResponse, Pos2, Ui};
+use derive_new::new;
+use eframe::egui::{Area, Frame, Id, InnerResponse, Pos2, Ui};
 
+use crate::draghandle::DragHandle;
 use crate::l2g::LerpToGamma;
-use crate::widgable::Widgable;
+use crate::widgable::{UiWidgableExt as _, Widgable};
 
+#[derive(new)]
+#[new(visibility = "pub(crate)")]
 pub(crate) struct WidgetBox<T> {
-    id: Id,
-    initpos: Option<Pos2>,
+    pub(crate) id: Id,
+    pub(crate) pos: Pos2,
     l2g: LerpToGamma,
     pub(crate) inner: T,
-}
-
-impl<T> WidgetBox<T> {
-    pub(crate) fn new(id: Id, initpos: Pos2, l2g: LerpToGamma, inner: T) -> Self {
-        let initpos = Some(initpos);
-        Self {
-            id,
-            initpos,
-            l2g,
-            inner,
-        }
-    }
-
-    pub(crate) fn get_pos(&self, ctx: &Context) -> Pos2 {
-        AreaState::load(ctx, self.id).unwrap().left_top_pos()
-    }
 }
 
 impl<T> Widgable for WidgetBox<T>
@@ -33,18 +21,20 @@ where
     type Inner = T::Inner;
 
     fn widge_into(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
-        let mut area = Area::new(self.id);
+        Area::new(self.id)
+            .current_pos(self.pos)
+            .show(ui.ctx(), |ui| {
+                let mut f = Frame::window(&ui.ctx().style());
+                self.l2g.mix_into(&mut f.fill);
 
-        if let Some(p) = self.initpos.take() {
-            // todo: See if we can call this unconditionally and drop the Option/switch:
-            area = area.default_pos(p);
-        }
-
-        area.show(ui.ctx(), |ui| {
-            let mut f = Frame::window(&ui.ctx().style());
-            self.l2g.mix_into(&mut f.fill);
-
-            f.show(ui, |ui| self.inner.widge_into(ui).inner).inner
-        })
+                f.show(ui, |ui| {
+                    ui.horizontal(|ui| {
+                        ui.widge(&mut DragHandle::new(&mut self.pos));
+                        ui.widge(&mut self.inner).inner
+                    })
+                    .inner
+                })
+                .inner
+            })
     }
 }

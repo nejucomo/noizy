@@ -42,8 +42,8 @@ impl eframe::App for App {
                 let iresp = ui.widge(&mut pending);
                 if let Some(gadget) = iresp.inner {
                     self.gadgets.push(WidgetBox::new(
-                        self.idgen.next_id(),
-                        pending.get_pos(ctx),
+                        pending.id.with("with-a-gadget"),
+                        pending.pos,
                         GADGET_L2G,
                         gadget,
                     ));
