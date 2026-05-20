@@ -2,6 +2,7 @@ use derive_new::new;
 use eframe::egui::{InnerResponse, Pos2, Rect, Sense, TextStyle, Ui};
 
 use crate::consts::GOLDEN_RATIO;
+use crate::consts::drag_patch::{DOT_GAMMA, DOTS_PER_TEXT_HEIGHT};
 use crate::widgable::Widgable;
 
 #[derive(new)]
@@ -16,12 +17,12 @@ impl<'a> Widgable for DragPatch<'a> {
 
     fn widge_into(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
         // Dot radius scaled to text size:
-        let radius = ui.text_style_height(&TextStyle::Body) / 9.0;
+        let radius = ui.text_style_height(&TextStyle::Body) / DOTS_PER_TEXT_HEIGHT;
 
         let resp = ui.allocate_rect(self.rect, Sense::drag());
 
         let painter = ui.painter();
-        let color = ui.visuals().text_color();
+        let color = ui.visuals().text_color().gamma_multiply(DOT_GAMMA);
         let step_delta = 2.0 * radius * GOLDEN_RATIO;
 
         let steps_x = (self.rect.width() / step_delta).floor() as usize + 1;

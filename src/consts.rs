@@ -13,3 +13,8 @@ pub(crate) const GADGET_L2G: LerpToGamma = LerpToGamma {
     to: Color32::PURPLE,
     gamma: 0.2,
 };
+
+pub(crate) mod drag_patch {
+    pub(crate) const DOTS_PER_TEXT_HEIGHT: f32 = 9.0;
+    pub(crate) const DOT_GAMMA: f32 = 0.4;
+}
