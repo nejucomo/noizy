@@ -1,8 +1,8 @@
 use eframe::egui::{InnerResponse, Ui};
+use noizy_engine::AnyGadget;
 
 use crate::consts::PENDING_L2G;
-use crate::gadgets::Gadget;
-use crate::iwidget::IWidget;
+use crate::widgable::Widgable;
 
 #[derive(Default)]
 pub(super) struct Pending {
@@ -11,10 +11,10 @@ pub(super) struct Pending {
     was_focused: bool,
 }
 
-impl IWidget for &mut Pending {
-    type Inner = Option<Gadget>;
+impl Widgable for Pending {
+    type Inner = Option<AnyGadget>;
 
-    fn ui_iresp(self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
+    fn widge_into(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
         let vis = ui.visuals_mut();
         vis.text_edit_bg_color = Some(
             PENDING_L2G
@@ -30,7 +30,8 @@ impl IWidget for &mut Pending {
         }
 
         let optg = if resp.lost_focus() {
-            Gadget::parse_initializer_opt(&self.initializer)
+            // TODO: Display any parse error as a tooltip-style indicator
+            self.initializer.parse().ok()
         } else {
             None
         };

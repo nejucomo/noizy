@@ -5,9 +5,9 @@ use crate::app::App;
 mod app;
 mod consts;
 mod idgen;
-mod iwidget;
 mod l2g;
 mod pending;
+mod widgable;
 mod widgetbox;
 
 pub fn run() {

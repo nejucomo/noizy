@@ -1,7 +1,7 @@
 use eframe::egui::{Area, AreaState, Context, Frame, Id, InnerResponse, Pos2, Ui};
 
-use crate::iwidget::IWidget;
 use crate::l2g::LerpToGamma;
+use crate::widgable::Widgable;
 
 pub(crate) struct WidgetBox<T> {
     id: Id,
@@ -26,13 +26,13 @@ impl<T> WidgetBox<T> {
     }
 }
 
-impl<'a, T> IWidget for &'a mut WidgetBox<T>
+impl<T> Widgable for WidgetBox<T>
 where
-    &'a mut T: IWidget,
+    T: Widgable,
 {
-    type Inner = <&'a mut T as IWidget>::Inner;
+    type Inner = T::Inner;
 
-    fn ui_iresp(self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
+    fn widge_into(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
         let mut area = Area::new(self.id);
 
         if let Some(p) = self.initpos.take() {
@@ -44,7 +44,7 @@ where
             let mut f = Frame::window(&ui.ctx().style());
             self.l2g.mix_into(&mut f.fill);
 
-            f.show(ui, |ui| (&mut self.inner).ui_iresp(ui).inner).inner
+            f.show(ui, |ui| self.inner.widge_into(ui).inner).inner
         })
     }
 }

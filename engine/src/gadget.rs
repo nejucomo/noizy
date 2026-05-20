@@ -1,1 +1,3 @@
-pub trait Gadget {}
+pub trait Gadget {
+    fn initializer(&self) -> &str;
+}
