@@ -8,17 +8,6 @@ pub(crate) trait Widgable {
     fn widge_into(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner>;
 }
 
-// impl<B> Widgable for B
-// where
-//     B: Widget,
-// {
-//     type Inner = ();
-
-//     fn widge(&mut self, ui: &mut Ui) -> InnerResponse<Self::Inner> {
-//         InnerResponse::new((), ui.add(self))
-//     }
-// }
-
 // TODO: Use `#[extension(...)]` from `extension-traits`
 pub(crate) trait UiWidgableExt {
     fn widge<W: Widgable>(&mut self, widget: &mut W) -> InnerResponse<W::Inner>;
