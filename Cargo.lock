@@ -1830,7 +1830,12 @@ dependencies = [
  "derive-new",
  "derive_more",
  "eframe",
+ "noizy-engine",
 ]
+
+[[package]]
+name = "noizy-engine"
+version = "0.1.0"
 
 [[package]]
 name = "num-traits"
