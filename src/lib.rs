@@ -6,6 +6,10 @@ mod app;
 mod consts;
 mod gadgets;
 mod idgen;
+mod iwidget;
+mod l2g;
+mod pending;
+mod widgetbox;
 
 pub fn run() {
     use eframe::{NativeOptions, egui::ViewportBuilder, run_native};
