@@ -1,15 +1,27 @@
+[workspace]
+resolver = "3"
+members = [".", "engine"]
+
 [package]
 name = "noizy"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+derive-new.workspace = true
+derive_more = { workspace = true, features = ["deref", "from", "into"] }
+eframe.workspace = true
+noizy-engine.workspace = true
+
+[workspace.dependencies]
+noizy-engine = { path = "engine" }
+
 # clap = { version = "4.5.54", features = ["derive"] }
 derive-new = "0.7.0"
-derive_more = { version = "2.1.1", features = ["deref", "from", "into"] }
+derive_more = "2.1.1"
 eframe = "0.33"
 # egui = "0.33"
 # env_logger = "0.11.8"
 # log = "0.4.29"
 # logging-options = "0.1.0"
-# thiserror = "2.0.17"
+thiserror = "2.0.17"

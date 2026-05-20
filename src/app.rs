@@ -1,17 +1,17 @@
 use eframe::egui::{CentralPanel, Modifiers, Sense, Vec2};
 use eframe::egui::{Context, Key::Escape, ViewportCommand::Close};
+use noizy_engine::AnyGadget;
 
 use crate::consts::{GADGET_L2G, PENDING_L2G};
-use crate::gadgets::Gadget;
 use crate::idgen::IdGen;
-use crate::iwidget::UiExt as _;
 use crate::pending::Pending;
+use crate::widgable::UiWidgableExt as _;
 use crate::widgetbox::WidgetBox;
 
 #[derive(Default)]
 pub(crate) struct App {
     idgen: IdGen,
-    gadgets: Vec<WidgetBox<Gadget>>,
+    gadgets: Vec<WidgetBox<AnyGadget>>,
     pending: Option<WidgetBox<Pending>>,
 }
 
@@ -35,11 +35,11 @@ impl eframe::App for App {
             }
 
             for gbox in self.gadgets.iter_mut() {
-                ui.add_iresp(gbox);
+                ui.widge(gbox);
             }
 
             if let Some(mut pending) = self.pending.take() {
-                let iresp = ui.add_iresp(&mut pending);
+                let iresp = ui.widge(&mut pending);
                 if let Some(gadget) = iresp.inner {
                     self.gadgets.push(WidgetBox::new(
                         self.idgen.next_id(),
